@@ -1,0 +1,574 @@
+{
+  "info": {
+    "name": "Sure API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "REST API collection for Sure (app.sure.am). Set the `baseUrl` and `apiKey` collection variables before use."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "description": "Base URL — use http://localhost:3000 for local dev or https://app.sure.am for production"
+    },
+    {
+      "key": "apiKey",
+      "value": "",
+      "description": "Your API key from account settings (sent as X-Api-Key header)"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key",   "value": "X-Api-Key",    "type": "string" },
+      { "key": "value", "value": "{{apiKey}}",    "type": "string" },
+      { "key": "in",    "value": "header",        "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Sign up",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/signup", "host": ["{{baseUrl}}"], "path": ["api","v1","auth","signup"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"email\": \"user@example.com\",\n    \"password\": \"password\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Log in",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["api","v1","auth","login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user\": {\n    \"email\": \"user@example.com\",\n    \"password\": \"password\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/refresh", "host": ["{{baseUrl}}"], "path": ["api","v1","auth","refresh"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"your_refresh_token\"\n}"
+            }
+          }
+        },
+        {
+          "name": "SSO exchange",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/sso_exchange", "host": ["{{baseUrl}}"], "path": ["api","v1","auth","sso_exchange"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"sso_code\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Enable AI",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/enable_ai", "host": ["{{baseUrl}}"], "path": ["api","v1","auth","enable_ai"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "List accounts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/accounts?page=1&per_page=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","accounts"],
+              "query": [
+                { "key": "page",     "value": "1",  "description": "Page number" },
+                { "key": "per_page", "value": "25", "description": "Items per page (max 100)" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "List transactions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","transactions"],
+              "query": [
+                { "key": "page",          "value": "1",          "description": "Page number",                             "disabled": true },
+                { "key": "per_page",      "value": "25",         "description": "Items per page (max 100)",                "disabled": true },
+                { "key": "account_id",    "value": "",           "description": "Filter by a single account UUID",         "disabled": true },
+                { "key": "account_ids[]", "value": "",           "description": "Filter by multiple account UUIDs",        "disabled": true },
+                { "key": "category_id",   "value": "",           "description": "Filter by a single category UUID",        "disabled": true },
+                { "key": "category_ids[]","value": "",           "description": "Filter by multiple category UUIDs",       "disabled": true },
+                { "key": "merchant_id",   "value": "",           "description": "Filter by a single merchant UUID",        "disabled": true },
+                { "key": "merchant_ids[]","value": "",           "description": "Filter by multiple merchant UUIDs",       "disabled": true },
+                { "key": "tag_ids[]",     "value": "",           "description": "Filter by tag UUIDs",                     "disabled": true },
+                { "key": "start_date",    "value": "2025-01-01", "description": "From date, inclusive (YYYY-MM-DD)",        "disabled": true },
+                { "key": "end_date",      "value": "2025-12-31", "description": "To date, inclusive (YYYY-MM-DD)",          "disabled": true },
+                { "key": "min_amount",    "value": "",           "description": "Minimum amount",                          "disabled": true },
+                { "key": "max_amount",    "value": "",           "description": "Maximum amount",                          "disabled": true },
+                { "key": "type",          "value": "expense",    "description": "income or expense",                       "disabled": true },
+                { "key": "search",        "value": "",           "description": "Search by name, notes, or merchant name", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create transaction",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/transactions", "host": ["{{baseUrl}}"], "path": ["api","v1","transactions"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": {\n    \"account_id\": \"uuid\",\n    \"date\": \"2025-03-15\",\n    \"amount\": 42.50,\n    \"name\": \"Coffee\",\n    \"notes\": \"optional\",\n    \"currency\": \"USD\",\n    \"nature\": \"expense\",\n    \"category_id\": \"uuid\",\n    \"merchant_id\": \"uuid\",\n    \"tag_ids\": [\"uuid\"]\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Retrieve transaction",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","transactions",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Transaction UUID" }]
+            }
+          }
+        },
+        {
+          "name": "Update transaction",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","transactions",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Transaction UUID" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": {\n    \"name\": \"Updated name\",\n    \"notes\": \"updated notes\",\n    \"category_id\": \"uuid\",\n    \"tag_ids\": [\"uuid\"]\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete transaction",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/transactions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","transactions",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Transaction UUID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","categories"],
+              "query": [
+                { "key": "classification", "value": "expense", "description": "income or expense",                  "disabled": true },
+                { "key": "roots_only",     "value": "true",    "description": "Return only top-level categories",   "disabled": true },
+                { "key": "parent_id",      "value": "",        "description": "Filter by parent category UUID",     "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Retrieve category",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categories/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","categories",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Category UUID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Merchants",
+      "item": [
+        {
+          "name": "List merchants",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/merchants", "host": ["{{baseUrl}}"], "path": ["api","v1","merchants"] }
+          }
+        },
+        {
+          "name": "Retrieve merchant",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/merchants/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","merchants",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Merchant UUID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "item": [
+        {
+          "name": "List tags",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/tags", "host": ["{{baseUrl}}"], "path": ["api","v1","tags"] }
+          }
+        },
+        {
+          "name": "Create tag",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/tags", "host": ["{{baseUrl}}"], "path": ["api","v1","tags"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tag\": {\n    \"name\": \"Travel\",\n    \"color\": \"#ff5733\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Retrieve tag",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tags/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","tags",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Tag UUID" }]
+            }
+          }
+        },
+        {
+          "name": "Update tag",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tags/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","tags",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Tag UUID" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tag\": {\n    \"name\": \"Travel\",\n    \"color\": \"#ff5733\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete tag",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/tags/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","tags",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Tag UUID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trades",
+      "item": [
+        {
+          "name": "List trades",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/trades",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","trades"],
+              "query": [
+                { "key": "page",          "value": "1",  "description": "Page number",             "disabled": true },
+                { "key": "per_page",      "value": "25", "description": "Items per page (max 100)", "disabled": true },
+                { "key": "account_id",    "value": "",   "description": "Filter by account UUID",   "disabled": true },
+                { "key": "account_ids[]", "value": "",   "description": "Filter by multiple account UUIDs", "disabled": true },
+                { "key": "start_date",    "value": "",   "description": "From date (YYYY-MM-DD)",   "disabled": true },
+                { "key": "end_date",      "value": "",   "description": "To date (YYYY-MM-DD)",     "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create trade",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/trades", "host": ["{{baseUrl}}"], "path": ["api","v1","trades"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trade\": {\n    \"account_id\": \"uuid\",\n    \"security_id\": \"uuid\",\n    \"date\": \"2025-03-15\",\n    \"qty\": 10,\n    \"price\": 150.00,\n    \"currency\": \"USD\",\n    \"type\": \"buy\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Retrieve trade",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/trades/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","trades",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Trade UUID" }]
+            }
+          }
+        },
+        {
+          "name": "Update trade",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/trades/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","trades",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Trade UUID" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trade\": {\n    \"qty\": 15,\n    \"price\": 155.00\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete trade",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/trades/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","trades",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Trade UUID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Holdings",
+      "item": [
+        {
+          "name": "List holdings",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/holdings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","holdings"],
+              "query": [
+                { "key": "page",          "value": "1",  "description": "Page number",                        "disabled": true },
+                { "key": "per_page",      "value": "25", "description": "Items per page (max 100)",            "disabled": true },
+                { "key": "account_id",    "value": "",   "description": "Filter by account UUID",              "disabled": true },
+                { "key": "account_ids[]", "value": "",   "description": "Filter by multiple account UUIDs",    "disabled": true },
+                { "key": "date",          "value": "",   "description": "Holdings as of date (YYYY-MM-DD)",    "disabled": true },
+                { "key": "start_date",    "value": "",   "description": "From date (YYYY-MM-DD)",              "disabled": true },
+                { "key": "end_date",      "value": "",   "description": "To date (YYYY-MM-DD)",                "disabled": true },
+                { "key": "security_id",   "value": "",   "description": "Filter by security UUID",             "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Retrieve holding",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/holdings/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","holdings",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Holding UUID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Imports",
+      "item": [
+        {
+          "name": "List imports",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/imports", "host": ["{{baseUrl}}"], "path": ["api","v1","imports"] }
+          }
+        },
+        {
+          "name": "Create import",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/imports", "host": ["{{baseUrl}}"], "path": ["api","v1","imports"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"import\": {\n    \"type\": \"TransactionImport\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Import types: TransactionImport, TradeImport, AccountImport, MintImport, CategoryImport, RuleImport"
+          }
+        },
+        {
+          "name": "Retrieve import",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/imports/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","imports",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Import UUID" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chats (AI)",
+      "item": [
+        {
+          "name": "List chats",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/v1/chats", "host": ["{{baseUrl}}"], "path": ["api","v1","chats"] }
+          }
+        },
+        {
+          "name": "Create chat",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/chats", "host": ["{{baseUrl}}"], "path": ["api","v1","chats"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chat\": {\n    \"title\": \"My chat\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Retrieve chat",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chats/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","chats",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Chat UUID" }]
+            }
+          }
+        },
+        {
+          "name": "Update chat",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chats/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","chats",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Chat UUID" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chat\": {\n    \"title\": \"Updated title\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete chat",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chats/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","chats",":id"],
+              "variable": [{ "key": "id", "value": "", "description": "Chat UUID" }]
+            }
+          }
+        },
+        {
+          "name": "Send message",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chats/:chat_id/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","chats",":chat_id","messages"],
+              "variable": [{ "key": "chat_id", "value": "", "description": "Chat UUID" }]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"content\": \"What was my biggest expense last month?\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Retry last assistant response",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chats/:chat_id/messages/retry",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","v1","chats",":chat_id","messages","retry"],
+              "variable": [{ "key": "chat_id", "value": "", "description": "Chat UUID" }]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

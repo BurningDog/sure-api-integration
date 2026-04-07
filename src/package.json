@@ -1,0 +1,20 @@
+{
+  "name": "sure-api-integration",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "transactions": "tsx app/transactions.ts",
+    "transactions-json": "tsx app/transactions.ts --json",
+    "transactions-all": "tsx app/transactions.ts --reverse --split-income-and-expenses",
+    "transactions-business": "tsx app/transactions.ts --account-name 'Business account' --reverse --split-income-and-expenses",
+    "transactions-savings": "tsx app/transactions.ts --account-name '32 Day Flexi Notice' --reverse --split-income-and-expenses"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}

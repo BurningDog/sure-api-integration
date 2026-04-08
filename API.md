@@ -14,7 +14,7 @@ Sure provides a REST API at `/api/v1/`. All responses are JSON.
 
 All endpoints (except Auth) require an API key passed as a header:
 
-```
+```sh
 X-Api-Key: your_api_key_here
 ```
 

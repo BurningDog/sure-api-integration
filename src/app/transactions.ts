@@ -14,6 +14,10 @@ const splitIncomeAndExpenses = process.argv.includes("--split-income-and-expense
 const jsonOutput = process.argv.includes("--json");
 const accountNameIndex = process.argv.indexOf("--account-name");
 const accountNameFilter = accountNameIndex !== -1 ? process.argv[accountNameIndex + 1] : null;
+const categoryIdIndex = process.argv.indexOf("--category-id");
+const categoryIdFilter = categoryIdIndex !== -1 ? process.argv[categoryIdIndex + 1] : null;
+const categoryNameIndex = process.argv.indexOf("--category-name");
+const categoryNameArg = categoryNameIndex !== -1 ? process.argv[categoryNameIndex + 1] : null;
 
 if (!apiKey || !apiUrl) {
   console.error(
@@ -91,6 +95,7 @@ async function fetchTransactionsPage(
   const url = new URL(`${apiUrl}/api/v1/transactions`);
   url.searchParams.set("page", String(page));
   url.searchParams.set("per_page", String(perPage));
+  if (categoryIdFilter) url.searchParams.set("category_id", categoryIdFilter);
 
   const response = await fetch(url.toString(), {
     headers: { "X-Api-Key": apiKey! },
@@ -235,7 +240,13 @@ async function main() {
       .map(({ type, value }) => [type, value])
   );
   const datetime = `${parts.year}-${parts.month}-${parts.day}_${parts.hour}-${parts.minute}-${parts.second}`;
-  const filename = `transactions-${datetime}.csv`;
+  const accountSlug = accountNameFilter
+    ? `-${accountNameFilter.toLowerCase().replace(/ /g, "-")}`
+    : "";
+  const categorySlug = categoryNameArg
+    ? `-${categoryNameArg.toLowerCase().replace(/ /g, "-")}`
+    : "";
+  const filename = `transactions${accountSlug}${categorySlug}-${datetime}.csv`;
   const filepath = path.resolve(process.cwd(), filename);
 
   fs.writeFileSync(filepath, csv, "utf-8");

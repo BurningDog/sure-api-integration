@@ -34,3 +34,7 @@ Other presets (`transactions-all`, `transactions-business`, `transactions-saving
 - `.gitignore` excludes `*.csv`, `.env.local`, `scripts/`, and `out/`; generated exports and local helper scripts are not tracked.
 - `CHANGELOG.md` is maintained by hand with a dated entry per feature/PR (newest first).
 - Untracked `PR.md` / `MERGE-COMMIT.md` in the root are draft PR text, not project docs.
+
+## Merging PRs
+
+Before merging a PR, first write the squash-merge commit message (a title plus a short body), add it to the top of `CHANGELOG.md` as a new dated entry (`## <commit title> — YYYY-MM-DD`, followed by the body), and commit and push that to the PR branch. Then squash-merge using that same message, so the CHANGELOG entry and the commit on `main` match.

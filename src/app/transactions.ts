@@ -14,10 +14,12 @@ const splitIncomeAndExpenses = process.argv.includes("--split-income-and-expense
 const jsonOutput = process.argv.includes("--json");
 const accountNameIndex = process.argv.indexOf("--account-name");
 const accountNameFilter = accountNameIndex !== -1 ? process.argv[accountNameIndex + 1] : null;
-const categoryIdIndex = process.argv.indexOf("--category-id");
-const categoryIdFilter = categoryIdIndex !== -1 ? process.argv[categoryIdIndex + 1] : null;
-const categoryNameIndex = process.argv.indexOf("--category-name");
-const categoryNameArg = categoryNameIndex !== -1 ? process.argv[categoryNameIndex + 1] : null;
+const categoryIdFilters: string[] = [];
+for (let i = 0; i < process.argv.length - 1; i++) {
+  if (process.argv[i] === "--category-id") categoryIdFilters.push(process.argv[i + 1]);
+}
+const outputNameIndex = process.argv.indexOf("--output-name");
+const outputNameArg = outputNameIndex !== -1 ? process.argv[outputNameIndex + 1] : null;
 
 if (!apiKey || !apiUrl) {
   console.error(
@@ -95,7 +97,7 @@ async function fetchTransactionsPage(
   const url = new URL(`${apiUrl}/api/v1/transactions`);
   url.searchParams.set("page", String(page));
   url.searchParams.set("per_page", String(perPage));
-  if (categoryIdFilter) url.searchParams.set("category_id", categoryIdFilter);
+  for (const id of categoryIdFilters) url.searchParams.append("category_id[]", id);
 
   const response = await fetch(url.toString(), {
     headers: { "X-Api-Key": apiKey! },
@@ -243,8 +245,8 @@ async function main() {
   const accountSlug = accountNameFilter
     ? `-${accountNameFilter.toLowerCase().replace(/ /g, "-")}`
     : "";
-  const categorySlug = categoryNameArg
-    ? `-${categoryNameArg.toLowerCase().replace(/ /g, "-")}`
+  const categorySlug = outputNameArg
+    ? `-${outputNameArg.toLowerCase().replace(/ /g, "-")}`
     : "";
   const filename = `transactions${accountSlug}${categorySlug}-${datetime}.csv`;
   const filepath = path.resolve(process.cwd(), filename);

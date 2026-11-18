@@ -249,12 +249,14 @@ async function main() {
     ? `-${outputNameArg.toLowerCase().replace(/ /g, "-")}`
     : "";
   const filename = `transactions${accountSlug}${categorySlug}-${datetime}.csv`;
-  const filepath = path.resolve(process.cwd(), filename);
+  const outDir = path.resolve(__dirname, "../../out");
+  fs.mkdirSync(outDir, { recursive: true });
+  const filepath = path.join(outDir, filename);
 
   fs.writeFileSync(filepath, csv, "utf-8");
 
   console.log(
-    `\nSaved ${transactions.length} transaction(s) to ${filename}`
+    `\nSaved ${transactions.length} transaction(s) to ${filepath}`
   );
 }
 

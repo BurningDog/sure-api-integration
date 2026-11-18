@@ -1,5 +1,13 @@
 # Changelog
 
+## feat: add category filtering to transaction export — 2026-04-08
+
+Adds `--category-id` and `--category-name` CLI flags to the transactions script. `--category-id`
+filters the API request by passing `category_id` as a query parameter; `--category-name` labels the
+output CSV filename with a category slug. Both account and category slugs are included in the
+filename when both flags are set. Also excludes `scripts/` from version control and fixes a minor
+syntax-hint omission in `API.md`.
+
 ## Docs: add README, CHANGELOG, LICENSE, and USERS (#1) - 2026-04-07
 
 * Document all preset npm scripts and what each one produces

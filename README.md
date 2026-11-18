@@ -32,7 +32,7 @@ All scripts are run from inside the `src/` directory.
 
 ### Transactions
 
-Fetches all transactions and writes a timestamped CSV file to the current directory.
+Fetches all transactions and writes a timestamped CSV file to the `out/` folder in the repository root (created if missing).
 
 ```bash
 npm run transactions
@@ -45,7 +45,11 @@ npm run transactions
 | `--reverse`                 | Reverse the order (oldest first)                    |
 | `--split-income-and-expenses` | Add separate `income` and `expense` columns       |
 | `--account-name <name>`     | Filter to a single account by exact name            |
+| `--category-id <id>`        | Filter by category ID (server-side); repeat the flag to include multiple categories |
+| `--output-name <name>`      | Add a slug of `<name>` to the CSV filename (label only, does not filter) |
 | `--json`                    | Print JSON to stdout instead of writing a CSV       |
+
+Example: `npx tsx app/transactions.ts --category-id <id1> --category-id <id2> --output-name "Groceries"`
 
 **Preset npm scripts:**
 
